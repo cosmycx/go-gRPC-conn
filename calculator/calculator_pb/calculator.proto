@@ -24,7 +24,16 @@ message FibonacciResponse{
     int32 resultNum = 1;
 }
 
+message MeanRequest{
+    int64 number = 1;
+}
+
+message MeanResponse{
+    int64 mean = 1;
+}
+
 service CalculatorService {
     rpc SumService(SumRequest) returns (SumResponse){};
     rpc FibonacciService(FibonacciRequest) returns (stream FibonacciResponse){};
+    rpc MeanService(stream MeanRequest) returns (MeanResponse){};
 }

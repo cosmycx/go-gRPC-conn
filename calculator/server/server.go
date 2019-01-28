@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"time"
@@ -50,9 +51,32 @@ func (*server) FibonacciService(req *calc_pb.FibonacciRequest, stream calc_pb.Ca
 	return nil
 } // .FibonacciService
 
+func (*server) MeanService(stream calc_pb.CalculatorService_MeanServiceServer) error {
+	fmt.Println("Calculator MeanService has been invoked with streaming request")
+
+	var mean, many int64
+	mean = 0
+	many = 0
+
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return stream.SendAndClose(&calc_pb.MeanResponse{
+				Mean: mean / many,
+			})
+		}
+		if err != nil {
+			log.Fatalf("Error while reading client stream: %v", err)
+		}
+		many++
+		mean += req.GetNumber()
+
+	}
+} // .MeanService
+
 func main() {
 
-	fmt.Println("Starting Calculator RPC server")
+	fmt.Printf("Starting Calculator RPC server\nWaiting client connection...\n")
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
