@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"time"
 
-	calc_pb "./calculator_pb"
+	calc_pb "../calculator_pb"
 	"google.golang.org/grpc"
 )
 
@@ -23,11 +24,35 @@ func (*server) SumService(ctx context.Context, req *calc_pb.SumRequest) (*calc_p
 		Result: result,
 	}
 	return resp, nil
-} // .Greet
+} // .SumService
+
+func (*server) FibonacciService(req *calc_pb.FibonacciRequest, stream calc_pb.CalculatorService_FibonacciServiceServer) error {
+	fmt.Printf("Starting Fibonacci streaming service, with request: %v", req)
+
+	fibo1 := 0
+	fibo2 := 1
+
+	n := req.GetNum()
+	var i int32
+	for i = 0; i <= n; i++ {
+		fibo3 := fibo1 + fibo2
+
+		resp := &calc_pb.FibonacciResponse{
+			ResultNum: int32(fibo3),
+		}
+		stream.Send(resp)
+		time.Sleep(500 * time.Millisecond)
+
+		fibo1 = fibo2
+		fibo2 = fibo3
+	} // .for
+
+	return nil
+} // .FibonacciService
 
 func main() {
 
-	fmt.Println("Starting RPC server")
+	fmt.Println("Starting Calculator RPC server")
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -40,4 +65,4 @@ func main() {
 		log.Fatalf("failed to serve: %v", err)
 	}
 
-}
+} // .main

@@ -16,6 +16,15 @@ message SumResponse{
     int32 result = 1;
 }
 
+message FibonacciRequest{
+    int32 num = 1;
+}
+
+message FibonacciResponse{
+    int32 resultNum = 1;
+}
+
 service CalculatorService {
     rpc SumService(SumRequest) returns (SumResponse){};
+    rpc FibonacciService(FibonacciRequest) returns (stream FibonacciResponse){};
 }

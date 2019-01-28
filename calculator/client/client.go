@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 
-	calc_pb "./calculator_pb"
+	calc_pb "../calculator_pb"
 	"google.golang.org/grpc"
 )
 
@@ -21,9 +22,33 @@ func main() {
 
 	rpcCalcSum(c, int32(10), int32(15))
 
-	// rpcStreamFiboNums(c, int32(30))
+	rpcStreamingFiboNums(c, int32(15))
 
 } // .main
+
+func rpcStreamingFiboNums(cc calc_pb.CalculatorServiceClient, endNum int32) {
+	fmt.Println("Starting fibonaci request...")
+	req := &calc_pb.FibonacciRequest{
+		Num: endNum,
+	}
+
+	resStream, err := cc.FibonacciService(context.Background(), req)
+	if err != nil {
+		log.Fatalf("error while calling Fibonacci RPC: %v", err)
+	}
+	for {
+		msg, err := resStream.Recv()
+
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatalf("error while reading stream: %v", err)
+		}
+		log.Printf("Response from Fibonacci: %v", msg.GetResultNum())
+	} // .for
+
+} // .rpcStreamingFiboNums
 
 func rpcCalcSum(cc calc_pb.CalculatorServiceClient, a int32, b int32) int32 {
 	fmt.Println("Starting sum request ...")
