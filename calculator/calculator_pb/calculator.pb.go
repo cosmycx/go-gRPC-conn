@@ -156,7 +156,7 @@ func init() {
 func init() { proto.RegisterFile("calculator.proto", fileDescriptor_c686ea360062a8cf) }
 
 var fileDescriptor_c686ea360062a8cf = []byte{
-	// 176 bytes of a gzipped FileDescriptorProto
+	// 181 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x48, 0x4e, 0xcc, 0x49,
 	0x2e, 0xcd, 0x49, 0x2c, 0xc9, 0x2f, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x42, 0x88,
 	0x28, 0x29, 0x72, 0x31, 0x07, 0x97, 0xe6, 0x0a, 0xf1, 0x70, 0x31, 0x26, 0x4a, 0x30, 0x2a, 0x30,
@@ -164,10 +164,11 @@ var fileDescriptor_c686ea360062a8cf = []byte{
 	0x57, 0x70, 0x69, 0x6e, 0x50, 0x6a, 0x61, 0x69, 0x6a, 0x71, 0x89, 0x90, 0x22, 0x17, 0x73, 0x71,
 	0x69, 0x2e, 0x58, 0x2d, 0xb7, 0x11, 0xbf, 0x1e, 0x92, 0xe1, 0x20, 0x45, 0x20, 0x39, 0x25, 0x55,
 	0x2e, 0x6e, 0xb0, 0x86, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x21, 0x31, 0x2e, 0xb6, 0xa2, 0xd4,
-	0xe2, 0xd2, 0x9c, 0x12, 0xa8, 0x05, 0x50, 0x9e, 0x91, 0x2f, 0xd8, 0xdc, 0xe0, 0xd4, 0xa2, 0xb2,
-	0xcc, 0xe4, 0x54, 0x21, 0x7b, 0x14, 0x9e, 0x18, 0xba, 0xc1, 0x10, 0xdb, 0xa5, 0xc4, 0x31, 0xc4,
-	0x21, 0x96, 0x28, 0x31, 0x38, 0xf1, 0x47, 0xf1, 0x22, 0xe4, 0xe2, 0x0b, 0x92, 0x92, 0xd8, 0xc0,
-	0xbe, 0x35, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x80, 0x68, 0x8c, 0xf4, 0x01, 0x01, 0x00, 0x00,
+	0xe2, 0xd2, 0x9c, 0x12, 0xa8, 0x05, 0x50, 0x9e, 0x51, 0x08, 0x97, 0xa0, 0x33, 0x5c, 0x77, 0x70,
+	0x6a, 0x51, 0x59, 0x66, 0x72, 0xaa, 0x90, 0x3d, 0xd8, 0x32, 0x18, 0x4f, 0x0c, 0xdd, 0x7c, 0x88,
+	0x23, 0xa4, 0xc4, 0x31, 0xc4, 0x21, 0x76, 0x29, 0x31, 0x38, 0xf1, 0x47, 0xf1, 0x22, 0xe4, 0xe2,
+	0x0b, 0x92, 0x92, 0xd8, 0xc0, 0x9e, 0x36, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xf2, 0x5c, 0x9c,
+	0xf9, 0x08, 0x01, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -178,64 +179,64 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// SumServiceClient is the client API for SumService service.
+// CalculatorServiceClient is the client API for CalculatorService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type SumServiceClient interface {
+type CalculatorServiceClient interface {
 	SumService(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error)
 }
 
-type sumServiceClient struct {
+type calculatorServiceClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewSumServiceClient(cc *grpc.ClientConn) SumServiceClient {
-	return &sumServiceClient{cc}
+func NewCalculatorServiceClient(cc *grpc.ClientConn) CalculatorServiceClient {
+	return &calculatorServiceClient{cc}
 }
 
-func (c *sumServiceClient) SumService(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error) {
+func (c *calculatorServiceClient) SumService(ctx context.Context, in *SumRequest, opts ...grpc.CallOption) (*SumResponse, error) {
 	out := new(SumResponse)
-	err := c.cc.Invoke(ctx, "/calculator.SumService/SumService", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/calculator.CalculatorService/SumService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// SumServiceServer is the server API for SumService service.
-type SumServiceServer interface {
+// CalculatorServiceServer is the server API for CalculatorService service.
+type CalculatorServiceServer interface {
 	SumService(context.Context, *SumRequest) (*SumResponse, error)
 }
 
-func RegisterSumServiceServer(s *grpc.Server, srv SumServiceServer) {
-	s.RegisterService(&_SumService_serviceDesc, srv)
+func RegisterCalculatorServiceServer(s *grpc.Server, srv CalculatorServiceServer) {
+	s.RegisterService(&_CalculatorService_serviceDesc, srv)
 }
 
-func _SumService_SumService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CalculatorService_SumService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SumRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SumServiceServer).SumService(ctx, in)
+		return srv.(CalculatorServiceServer).SumService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/calculator.SumService/SumService",
+		FullMethod: "/calculator.CalculatorService/SumService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SumServiceServer).SumService(ctx, req.(*SumRequest))
+		return srv.(CalculatorServiceServer).SumService(ctx, req.(*SumRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _SumService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "calculator.SumService",
-	HandlerType: (*SumServiceServer)(nil),
+var _CalculatorService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "calculator.CalculatorService",
+	HandlerType: (*CalculatorServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "SumService",
-			Handler:    _SumService_SumService_Handler,
+			Handler:    _CalculatorService_SumService_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

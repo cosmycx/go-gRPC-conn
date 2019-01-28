@@ -35,7 +35,7 @@ func main() {
 
 	s := grpc.NewServer()
 
-	calc_pb.RegisterSumServiceServer(s, &server{})
+	calc_pb.RegisterCalculatorServiceServer(s, &server{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

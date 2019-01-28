@@ -17,13 +17,15 @@ func main() {
 	}
 	defer conn.Close()
 
-	c := calc_pb.NewSumServiceClient(conn)
+	c := calc_pb.NewCalculatorServiceClient(conn)
 
 	rpcCalcSum(c, int32(10), int32(15))
 
+	// rpcStreamFiboNums(c, int32(30))
+
 } // .main
 
-func rpcCalcSum(cc calc_pb.SumServiceClient, a int32, b int32) int32 {
+func rpcCalcSum(cc calc_pb.CalculatorServiceClient, a int32, b int32) int32 {
 	fmt.Println("Starting sum request ...")
 
 	req := &calc_pb.SumRequest{
