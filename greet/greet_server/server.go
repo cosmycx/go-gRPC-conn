@@ -16,7 +16,7 @@ import (
 type server struct{}
 
 func (*server) GreetEveryone(stream greetpb.GreetService_GreetEveryoneServer) error {
-	fmt.Printf("Greet Everyone function invoked with streaming request")
+	fmt.Println("Greet Everyone function invoked with streaming request")
 	for {
 		req, err := stream.Recv()
 		if err == io.EOF {
@@ -28,10 +28,12 @@ func (*server) GreetEveryone(stream greetpb.GreetService_GreetEveryoneServer) er
 		}
 		firstName := req.GetGreeting().GetFirstName()
 		result := "Hello " + firstName + "!"
+
 		sErr := stream.Send(&greetpb.GreetEveryoneResponse{
 			Result: result,
 		})
-		if sErr == nil {
+
+		if sErr != nil {
 			log.Fatalf("Error while sending: %v", sErr)
 			return sErr
 		}
