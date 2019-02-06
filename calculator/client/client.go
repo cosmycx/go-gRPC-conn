@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
+	"sync"
+	"time"
 
 	calc_pb "../calculator_pb"
 	"google.golang.org/grpc"
@@ -20,13 +23,66 @@ func main() {
 
 	c := calc_pb.NewCalculatorServiceClient(conn)
 
-	doSumServ(c, int32(10), int32(15))
+	// doSumServ(c, int32(10), int32(15))
 
-	doFibonacciServ(c, int32(15))
+	// doFibonacciServ(c, int32(15))
 
-	doMeanServ(c)
+	// doMeanServ(c)
+
+	doMaxServ(c)
 
 } // .main
+
+func doMaxServ(c calc_pb.CalculatorServiceClient) {
+
+	stream, err := c.MaxService(context.Background())
+	if err != nil {
+		log.Fatalf("error while calling MaxService: %v", err)
+	}
+
+	// waitchan := make(chan struct{})
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	go func() {
+		for i := 0; i < 15; i++ {
+
+			rand.Seed(time.Now().UnixNano())
+			num := rand.Intn(1000) - 500
+
+			fmt.Printf("Sending number: %v\n", num)
+			stream.Send(&calc_pb.MaxRequest{
+				Num: int64(num),
+			})
+
+			time.Sleep(time.Second)
+		} // .for
+		stream.CloseSend()
+
+	}() // .go func
+
+	go func() {
+		for {
+
+			res, err := stream.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatalf("Error while receiving: %v", err)
+				break
+			}
+			fmt.Printf("Received, max: %v\n", res.GetMax())
+		} // .for
+
+		// close(waitchan)
+		wg.Done()
+	}() // .go func
+
+	// <-waitchan
+	wg.Wait()
+} // .doMaxServ
 
 func doMeanServ(c calc_pb.CalculatorServiceClient) {
 	fmt.Println("Starting client streaming of numbers...")

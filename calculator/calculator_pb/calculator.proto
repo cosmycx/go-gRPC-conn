@@ -32,8 +32,17 @@ message MeanResponse{
     int64 mean = 1;
 }
 
+message MaxRequest{
+    int64 num = 1;
+}
+
+message MaxResponse{
+    int64 max = 1;
+}
+
 service CalculatorService {
     rpc SumService(SumRequest) returns (SumResponse){};
     rpc FibonacciService(FibonacciRequest) returns (stream FibonacciResponse){};
     rpc MeanService(stream MeanRequest) returns (MeanResponse){};
+    rpc MaxService(stream MaxRequest) returns (stream MaxResponse){};
 }
